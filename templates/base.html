@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kompose - UI</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static "webapp/css/style.css" %}">
+    <link rel="stylesheet" href="{% static "webapp/css/prism.css" %}">
+
+    <link rel="shortcut icon" type="image/png" href="https://kubernetes.io/images/favicon.png">
+
+</head>
+<body>
+
+<div class="container">
+    <form action="." method="POST" id="converter" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="file_upload" id="file_upload">
+
+        <div class="alert alert-success collapse" id="success_div">
+            <strong id="strong_success"></strong>
+        </div>
+        <div class="alert alert-danger collapse pre-scrollable" id="failure_div">
+            <strong id="strong_failure"></strong>
+        </div>
+        <div class="alert alert-warning collapse pre-scrollable" id="warning_div">
+            <strong id="strong_warning"></strong>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="input">Paste your docker compose file here:</label>
+                    {{ form.input_text }}
+                </div>
+                <div>
+                    <label class="control-label">Or upload your file here <small>Max File Size 10 MB</small></label>
+                    <label class="btn btn-default btn-primary">
+                        Browse {{ form.input_file }}
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="btn-group-vertical " role="group" >
+                    <br><br><br><br><br><br>
+                    <button type="button" class="btn btn-default" data-clipboard-target="#output">Copy Output</button>
+                    <button type="submit" class="btn btn-default btn-success">Convert</button>
+                    <button type="button" class="btn btn-info collapse" id="download_button">Download Zip File</button>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <label class="control-label">Your Output:</label>
+                <pre><code class="language-yaml" id="output"></code></pre>
+            </div>
+        </div>
+        <a class="embedly-card" data-card-controls="0" href="https://github.com/kubernetes/kompose">kubernetes/kompose</a>
+        <script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/3.9.0/js-yaml.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.7/download.min.js"></script>
+<script src="{% static "webapp/js/prism.js" %}"></script>
+<script src="{% static "webapp/js/script.js" %}"></script>
+</body>
+</html>

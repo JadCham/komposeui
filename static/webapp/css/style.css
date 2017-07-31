@@ -1,0 +1,34 @@
+textarea {
+    resize: none;
+}
+pre{
+    height: 75vh;
+    overflow-y: scroll;
+}
+#input{
+    height: 75vh;
+    overflow-y: scroll;
+}
+.container{
+    margin-top: 30px;
+}
+.btn:focus {
+    outline: none;
+}
+.alert{
+    -webkit-transition: max-height 0.8s;
+    -moz-transition: max-height 0.8s;
+    transition: max-height 0.8s;
+}
+#warning_div #failure_div{
+    height: 100px;
+}
+#logo {
+    float: left;
+    width: 200px;
+    height: 200px;
+    margin-right: 10px;
+}
+body{
+    height:100vh;
+}
