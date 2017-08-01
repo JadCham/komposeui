@@ -61,7 +61,7 @@ __Contributions:__ If you want to contribute to the project [make a pull request
 
 
 [Build Status]: https://travis-ci.org/jadcham/komposeui
-[Build Status Widget]: https://travis-ci.org/jadcham/komposeui.svg?branch=master
+[Build Status Widget]: https://travis-ci.org/JadCham/komposeui.svg?branch=master
 [DockerHub]: https://hub.docker.com/r/jadcham/komposeui/
 [DockerHub Widget]: https://img.shields.io/docker/pulls/jadcham/komposeui.svg
 
