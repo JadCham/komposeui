@@ -4,7 +4,9 @@ items:
   kind: Service
   metadata:
     annotations:
+      kompose.cmd: %CMD%
       kompose.service.type: LoadBalancer
+      kompose.version: %VERSION%
     creationTimestamp: null
     labels:
       io.kompose.service: frontend
@@ -22,6 +24,9 @@ items:
 - apiVersion: v1
   kind: Service
   metadata:
+    annotations:
+      kompose.cmd: %CMD%
+      kompose.version: %VERSION%
     creationTimestamp: null
     labels:
       io.kompose.service: redis-master
@@ -38,6 +43,9 @@ items:
 - apiVersion: v1
   kind: Service
   metadata:
+    annotations:
+      kompose.cmd: %CMD%
+      kompose.version: %VERSION%
     creationTimestamp: null
     labels:
       io.kompose.service: redis-slave
@@ -55,7 +63,9 @@ items:
   kind: Deployment
   metadata:
     annotations:
+      kompose.cmd: %CMD%
       kompose.service.type: LoadBalancer
+      kompose.version: %VERSION%
     creationTimestamp: null
     labels:
       io.kompose.service: frontend
@@ -83,6 +93,9 @@ items:
 - apiVersion: extensions/v1beta1
   kind: Deployment
   metadata:
+    annotations:
+      kompose.cmd: %CMD%
+      kompose.version: %VERSION%
     creationTimestamp: null
     labels:
       io.kompose.service: redis-master
@@ -107,6 +120,9 @@ items:
 - apiVersion: extensions/v1beta1
   kind: Deployment
   metadata:
+    annotations:
+      kompose.cmd: %CMD%
+      kompose.version: %VERSION%
     creationTimestamp: null
     labels:
       io.kompose.service: redis-slave
@@ -133,3 +149,4 @@ items:
   status: {}
 kind: List
 metadata: {}
+

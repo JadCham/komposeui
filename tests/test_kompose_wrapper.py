@@ -2,6 +2,7 @@ from webapp.kompose import KomposeWrapper
 from webapp.kompose.KomposeExceptions.KomposeConvertException import KomposeConvertException
 from webapp.kompose.KomposeFileManager import KomposeFileManager
 import unittest
+import yaml
 
 
 class TestKomposeWrapper(unittest.TestCase):
@@ -17,8 +18,16 @@ class TestKomposeWrapper(unittest.TestCase):
         docker_compose_path = self.kompose_file_manager.write_yaml_to_file(self.docker_compose_yaml)
         output, kubernetes_yaml = KomposeWrapper.kompose_convert_web(docker_compose_path, self.kompose_file_manager)
 
+        parsed_kubernetes_yaml = yaml.load(kubernetes_yaml)
+        kompose_cmd = parsed_kubernetes_yaml['items'][0]['metadata']['annotations']['kompose.cmd'].replace(" -o", "\n        -o")
+        kompose_version = parsed_kubernetes_yaml['items'][0]['metadata']['annotations']['kompose.version']
+
         with open("tests/resources/output-k8s.yaml", 'r') as kubernetes_expected_file:
-            self.assertIn(kubernetes_expected_file.read(), kubernetes_yaml)
+
+            # Replace kompose.version and kompose.cmd to match converted yaml
+            expected_yaml = kubernetes_expected_file.read().replace("%VERSION%", kompose_version).replace("%CMD%", kompose_cmd)
+
+            self.assertIn(expected_yaml, kubernetes_yaml)
 
     def test_kompose_exception_wrong_path(self):
         with self.assertRaises(KomposeConvertException):
