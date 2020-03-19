@@ -1,16 +1,18 @@
-FROM python:3
+FROM alpine as prep
 
 ENV KOMPOSE_VERSION "v1.21.0"
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        postgresql-client \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add curl
 
-# Install kompose
-RUN curl -L https://github.com/kubernetes/kompose/releases/download/$KOMPOSE_VERSION/kompose-linux-amd64 -o kompose \
-    && chmod +x kompose \
-    && mv ./kompose /usr/local/bin/kompose
+# Fetch kompose binary
+RUN curl -L https://github.com/kubernetes/kompose/releases/download/$KOMPOSE_VERSION/kompose-linux-amd64 -o /tmp/kompose
+
+
+FROM python:3.6-alpine
+
+COPY --from=prep /tmp/kompose /usr/local/bin/kompose
+
+RUN chmod +x /usr/local/bin/kompose
 
 WORKDIR /usr/src/app
 
