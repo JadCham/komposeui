@@ -1,6 +1,6 @@
 FROM python:3
 
-ENV KOMPOSE_VERSION "v1.18.0"
+ENV KOMPOSE_VERSION "v1.21.0"
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
