@@ -8,7 +8,7 @@ RUN apk add curl
 RUN curl -L https://github.com/kubernetes/kompose/releases/download/$KOMPOSE_VERSION/kompose-linux-amd64 -o /tmp/kompose
 
 
-FROM python:3.6-alpine
+FROM python:3.9-alpine
 
 COPY --from=prep /tmp/kompose /usr/local/bin/kompose
 
