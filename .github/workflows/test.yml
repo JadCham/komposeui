@@ -24,7 +24,7 @@ jobs:
       - name: Install Dependencies
         run: pip install -r requirements.txt
       - name: Install Kompose
-        run: curl -L https://github.com/kubernetes/kompose/releases/download/v1.21.0/kompose-linux-amd64 -o kompose && chmod +x kompose && sudo mv ./kompose /usr/bin/kompose
+        run: curl -L https://github.com/kubernetes/kompose/releases/download/v1.25/kompose-linux-amd64 -o kompose && chmod +x kompose && sudo mv ./kompose /usr/bin/kompose
       - name: Run Migrations
         run: python manage.py makemigrations && python manage.py migrate
       - name: Test

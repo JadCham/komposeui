@@ -1,6 +1,6 @@
 FROM alpine as prep
 
-ENV KOMPOSE_VERSION "v1.21.0"
+ENV KOMPOSE_VERSION "v1.25"
 
 RUN apk add curl
 
