@@ -25,6 +25,8 @@ jobs:
         run: uv sync --all-extras --dev
       - name: Install Kompose
         run: curl -L https://github.com/kubernetes/kompose/releases/download/v1.34/kompose-linux-amd64 -o kompose && chmod +x kompose && sudo mv ./kompose /usr/bin/kompose
+      - name: Show Kompose Version
+        run: kompose version
       - name: Run Migrations
         run: uv run python manage.py makemigrations && uv run python manage.py migrate
       - name: Test
