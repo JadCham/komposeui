@@ -1,0 +1,27 @@
+
+[project]
+name = "komposeui"
+dynamic = ["version"]
+description = "A Django project for visualizing Docker Compose to Kubernetes transformations"
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+authors = [
+    { name = "Jad Chamoun"},
+    { name = "Joe Haddad" },
+]
+
+dependencies = [
+    "Django==5.1.2",
+    "pytz==2024.2",
+    "pyyaml==6.0.2",
+]
+
+
+[tool.setuptools.packages]
+find = { include = ["kompose_ui"] }
+
+[project.urls]
+Homepage = "https://composetokube.com/"
+Documentation = "https://composetokube.com/docs/"
+Repository = "https://github.com/JadCham/komposeui"
+Issues = "https://github.com/JadCham/komposeui/issues"

@@ -12,20 +12,31 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.11, 3.12, 3.13]
       fail-fast: false
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+      - name: Install the project
+        run: uv sync --all-extras --dev
       - name: Install Kompose
-        run: curl -L https://github.com/kubernetes/kompose/releases/download/v1.25/kompose-linux-amd64 -o kompose && chmod +x kompose && sudo mv ./kompose /usr/bin/kompose
+        run: |
+          ARCH=$(uname -m)
+          if [ "$ARCH" = "x86_64" ]; then
+            ARCH="amd64"
+          elif [ "$ARCH" = "aarch64" ]; then
+            ARCH="arm64"
+          fi
+          curl -L https://github.com/kubernetes/kompose/releases/download/v1.34.0/kompose-linux-$ARCH -o kompose
+          chmod +x kompose
+          sudo mv ./kompose /usr/bin/kompose
+      - name: Show Kompose Version
+        run: kompose version
       - name: Run Migrations
-        run: python manage.py makemigrations && python manage.py migrate
+        run: uv run python manage.py makemigrations && uv run python manage.py migrate
       - name: Test
-        run:  python manage.py test
+        run: uv run python manage.py test
