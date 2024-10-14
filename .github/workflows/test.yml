@@ -26,6 +26,6 @@ jobs:
       - name: Install Kompose
         run: curl -L https://github.com/kubernetes/kompose/releases/download/v1.34/kompose-linux-amd64 -o kompose && chmod +x kompose && sudo mv ./kompose /usr/bin/kompose
       - name: Run Migrations
-        run: uv run python manage.py makemigrations && python manage.py migrate
+        run: uv run python manage.py makemigrations && uv run python manage.py migrate
       - name: Test
         run: uv run python manage.py test

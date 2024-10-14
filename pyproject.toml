@@ -6,7 +6,7 @@ description = "A Django project for visualizing Docker Compose to Kubernetes tra
 readme = "README.md"
 requires-python = ">=3.10,<3.14"
 authors = [
-    { name = "Jad Chamoun", email = "jad.chamoun@gmail.com" },
+    { name = "Jad Chamoun"},
     { name = "Joe Haddad" },
 ]
 
