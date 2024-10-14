@@ -1,179 +1,156 @@
+---
 apiVersion: v1
-items:
-- apiVersion: v1
-  kind: Service
-  metadata:
-    annotations:
-      kompose.cmd: %CMD%
-      kompose.service.type: LoadBalancer
-      kompose.version: %VERSION%
-    creationTimestamp: null
-    labels:
-      io.kompose.service: frontend
-    name: frontend
-  spec:
-    ports:
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: %CMD%
+    kompose.service.type: LoadBalancer
+    kompose.version: %VERSION%
+  labels:
+    io.kompose.service: frontend-tcp
+  name: frontend-tcp
+spec:
+  ports:
     - name: "80"
       port: 80
       targetPort: 80
-    selector:
-      io.kompose.service: frontend
-    type: LoadBalancer
-  status:
-    loadBalancer: {}
-- apiVersion: v1
-  kind: Service
-  metadata:
-    annotations:
-      kompose.cmd: %CMD%
-      kompose.version: %VERSION%
-    creationTimestamp: null
-    labels:
-      io.kompose.service: redis-master
-    name: redis-master
-  spec:
-    ports:
+  selector:
+    io.kompose.service: frontend
+  type: LoadBalancer
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: %CMD%
+    kompose.version: %VERSION%
+  labels:
+    io.kompose.service: redis-master
+  name: redis-master
+spec:
+  ports:
     - name: "6379"
       port: 6379
       targetPort: 6379
-    selector:
-      io.kompose.service: redis-master
-  status:
-    loadBalancer: {}
-- apiVersion: v1
-  kind: Service
-  metadata:
-    annotations:
-      kompose.cmd: %CMD%
-      kompose.version: %VERSION%
-    creationTimestamp: null
-    labels:
-      io.kompose.service: redis-slave
-    name: redis-slave
-  spec:
-    ports:
+  selector:
+    io.kompose.service: redis-master
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: %CMD%
+    kompose.version: %VERSION%
+  labels:
+    io.kompose.service: redis-slave
+  name: redis-slave
+spec:
+  ports:
     - name: "6379"
       port: 6379
       targetPort: 6379
-    selector:
-      io.kompose.service: redis-slave
-  status:
-    loadBalancer: {}
-- apiVersion: apps/v1
-  kind: Deployment
-  metadata:
-    annotations:
-      kompose.cmd: %CMD%
-      kompose.service.type: LoadBalancer
-      kompose.version: %VERSION%
-    creationTimestamp: null
-    labels:
+  selector:
+    io.kompose.service: redis-slave
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: %CMD%
+    kompose.service.type: LoadBalancer
+    kompose.version: %VERSION%
+  labels:
+    io.kompose.service: frontend
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
       io.kompose.service: frontend
-    name: frontend
-  spec:
-    replicas: 1
-    selector:
-      matchLabels:
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: %CMD%
+        kompose.service.type: LoadBalancer
+        kompose.version: %VERSION%
+      labels:
         io.kompose.service: frontend
-    strategy: {}
-    template:
-      metadata:
-        annotations:
-          kompose.cmd: %CMD%
-          kompose.service.type: LoadBalancer
-          kompose.version: %VERSION%
-        creationTimestamp: null
-        labels:
-          io.kompose.service: frontend
-      spec:
-        containers:
+    spec:
+      containers:
         - env:
-          - name: GET_HOSTS_FROM
-            value: dns
+            - name: GET_HOSTS_FROM
+              value: dns
           image: gcr.io/google-samples/gb-frontend:v4
-          imagePullPolicy: ""
           name: frontend
           ports:
-          - containerPort: 80
-          resources: {}
-        restartPolicy: Always
-        serviceAccountName: ""
-        volumes: null
-  status: {}
-- apiVersion: apps/v1
-  kind: Deployment
-  metadata:
-    annotations:
-      kompose.cmd: %CMD%
-      kompose.version: %VERSION%
-    creationTimestamp: null
-    labels:
+            - containerPort: 80
+              protocol: TCP
+      restartPolicy: Always
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: %CMD%
+    kompose.version: %VERSION%
+  labels:
+    io.kompose.service: redis-master
+  name: redis-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
       io.kompose.service: redis-master
-    name: redis-master
-  spec:
-    replicas: 1
-    selector:
-      matchLabels:
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: %CMD%
+        kompose.version: %VERSION%
+      labels:
         io.kompose.service: redis-master
-    strategy: {}
-    template:
-      metadata:
-        annotations:
-          kompose.cmd: %CMD%
-          kompose.version: %VERSION%
-        creationTimestamp: null
-        labels:
-          io.kompose.service: redis-master
-      spec:
-        containers:
+    spec:
+      containers:
         - image: gcr.io/google_containers/redis:e2e
-          imagePullPolicy: ""
           name: redis-master
           ports:
-          - containerPort: 6379
-          resources: {}
-        restartPolicy: Always
-        serviceAccountName: ""
-        volumes: null
-  status: {}
-- apiVersion: apps/v1
-  kind: Deployment
-  metadata:
-    annotations:
-      kompose.cmd: %CMD%
-      kompose.version: %VERSION%
-    creationTimestamp: null
-    labels:
+            - containerPort: 6379
+              protocol: TCP
+      restartPolicy: Always
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: %CMD%
+    kompose.version: %VERSION%
+  labels:
+    io.kompose.service: redis-slave
+  name: redis-slave
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
       io.kompose.service: redis-slave
-    name: redis-slave
-  spec:
-    replicas: 1
-    selector:
-      matchLabels:
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: %CMD%
+        kompose.version: %VERSION%
+      labels:
         io.kompose.service: redis-slave
-    strategy: {}
-    template:
-      metadata:
-        annotations:
-          kompose.cmd: %CMD%
-          kompose.version: %VERSION%
-        creationTimestamp: null
-        labels:
-          io.kompose.service: redis-slave
-      spec:
-        containers:
+    spec:
+      containers:
         - env:
-          - name: GET_HOSTS_FROM
-            value: dns
+            - name: GET_HOSTS_FROM
+              value: dns
           image: gcr.io/google_samples/gb-redisslave:v1
-          imagePullPolicy: ""
           name: redis-slave
           ports:
-          - containerPort: 6379
-          resources: {}
-        restartPolicy: Always
-        serviceAccountName: ""
-        volumes: null
-  status: {}
-kind: List
-metadata: {}
+            - containerPort: 6379
+              protocol: TCP
+      restartPolicy: Always
