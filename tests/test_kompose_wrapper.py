@@ -18,7 +18,7 @@ class TestKomposeWrapper(unittest.TestCase):
         docker_compose_path = self.kompose_file_manager.write_yaml_to_file(self.docker_compose_yaml)
         output, kubernetes_yaml = KomposeWrapper.kompose_convert_web(docker_compose_path, self.kompose_file_manager)
 
-        parsed_kubernetes_yaml = yaml.load(kubernetes_yaml)
+        parsed_kubernetes_yaml = yaml.load(kubernetes_yaml, Loader=yaml.SafeLoader)
         kompose_cmd = parsed_kubernetes_yaml['items'][0]['metadata']['annotations']['kompose.cmd']
         kompose_version = parsed_kubernetes_yaml['items'][0]['metadata']['annotations']['kompose.version']
 
@@ -26,7 +26,7 @@ class TestKomposeWrapper(unittest.TestCase):
 
             # Replace kompose.version and kompose.cmd to match converted yaml
             expected_yaml = kubernetes_expected_file.read().replace("%VERSION%", kompose_version).replace("%CMD%", kompose_cmd)
-            parsed_expected_yaml = yaml.load(expected_yaml)
+            parsed_expected_yaml = yaml.load(expected_yaml, Loader=yaml.SafeLoader)
 
             self.assertEqual(parsed_expected_yaml, parsed_kubernetes_yaml)
 

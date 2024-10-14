@@ -45,7 +45,7 @@ def kompose_convert_web(input_file_path, kompose_file_manager):
 
     except CalledProcessError as e:
 
-        logger.error('Something went wrong running kompose', e)
+        logger.error('Something went wrong running kompose', exc_info=True)
 
         # Format and raise error
         error = "<br/>".join(e.output.decode("utf-8").split("\n"))
@@ -70,7 +70,7 @@ def checkKomposeInstall():
 
     except CalledProcessError as e:
 
-        logger.error("Kompose doesn't seem to be installed or not in correct path", e)
+        logger.error("Kompose doesn't seem to be installed or not in correct path", exc_info=True)
         raise KomposeConvertException("Kompose doesn't seem to be installed or not in correct path")
 
 
@@ -102,14 +102,14 @@ def kompose_convert_multiple_files(input_file_path, kompose_file_manager):
         return output
 
     except CalledProcessError as e:
-        logger.error('Something went wrong running kompose', e)
+        logger.error('Something went wrong running kompose', exc_info=True)
 
         # Format and raise error
         error = "<br/>".join(e.output.decode("utf-8").split("\n"))
         raise KomposeConvertException(ansi2html(error))
 
     except Exception as e:
-        logger.error('Something went wrong running kompose', e)
+        logger.error('Something went wrong running kompose', exc_info=True)
 
         # Format and raise error
         error = "<br/>".join(e.output.decode("utf-8").split("\n"))
